@@ -8,11 +8,11 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.vinhtt.jarlauncher.view.MainViewController"
-            prefWidth="900" prefHeight="700">
+            prefWidth="800" prefHeight="700">
 
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
-            <TilePane fx:id="projectGrid" hgap="30" vgap="30" prefColumns="4">
+            <TilePane fx:id="projectGrid" hgap="30" vgap="30" alignment="TOP_CENTER">
                 <padding>
                     <Insets top="30" right="30" bottom="30" left="30"/>
                 </padding>
