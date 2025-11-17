@@ -1,7 +1,8 @@
 /* ----- TỔNG QUAN & NỀN ----- */
 .root {
-    -fx-background-color: #1e1e1e; /* Nền chính (gần đen) */
+    -fx-background-color: #1a1a1ae0; /* Gần đen, hơi trong suốt */
     -fx-font-family: "SF Pro Text", "Inter", sans-serif;
+    -fx-font-size: 14px;
 }
 
 .scroll-pane {
@@ -13,53 +14,67 @@
     -fx-background-color: transparent;
 }
 
+/* ----- TILEPANE CHỨA CÁC CARD ----- */
+.tile-pane {
+    -fx-background-color: transparent; /* Đảm bảo TilePane trong suốt */
+}
+
+
 /* ----- CARD DỰ ÁN (PROJECT CELL) ----- */
 .project-card {
-    -fx-background-color: #2a2a2a; /* Nền card */
-    -fx-background-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);
+    -fx-background-color: #2a2a2ab3; /* Nền card, hơi trong suốt (b3 là 70% opacity) */
+    -fx-background-radius: 18; /* Bo góc nhiều hơn */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 20, 0, 0, 5); /* Đổ bóng mạnh hơn */
     -fx-cursor: hand;
     -fx-transition: all 0.2s ease-in-out;
+    -fx-alignment: center;
+    -fx-padding: 20; /* Tăng padding */
+    -fx-spacing: 15; /* Khoảng cách giữa icon và label */
 }
 
 .project-card:hover {
-    -fx-background-color: #3a3a3a; /* Màu khi hover */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0, 0, 3);
+    -fx-background-color: #3a3a3ac2; /* Màu khi hover, hơi trong suốt */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 25, 0, 0, 8);
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
 }
 
 .project-card .label {
-    -fx-text-fill: #e0e0e0; /* Chữ màu sáng */
-    -fx-font-weight: 500;
+    -fx-text-fill: #f0f0f0; /* Chữ màu sáng */
+    -fx-font-weight: 600; /* Đậm hơn */
+    -fx-font-size: 16px; /* Chữ lớn hơn */
+    -fx-alignment: center;
 }
 
 /* ----- CARD THÊM MỚI (ADD CARD) ----- */
 .add-card {
     -fx-background-color: transparent;
-    -fx-background-radius: 12;
-    -fx-border-color: #444444; /* Viền dashed */
+    -fx-background-radius: 18;
+    -fx-border-color: #4a4a4a; /* Viền dashed */
     -fx-border-width: 2px;
     -fx-border-style: dashed;
     -fx-cursor: hand;
     -fx-transition: all 0.2s ease-in-out;
+    -fx-alignment: center;
+    -fx-padding: 20;
+    -fx-spacing: 15;
 }
 
 .add-card:hover {
-    -fx-background-color: #2a2a2a;
+    -fx-background-color: #2a2a2ac2; /* Nền mờ khi hover */
     -fx-border-color: #007aff; /* Màu xanh Apple */
 }
 
 .add-card-icon {
-    -fx-font-size: 48px;
-    -fx-text-fill: #888888;
+    -fx-font-size: 64px; /* Icon lớn hơn */
+    -fx-text-fill: #777777;
     -fx-font-weight: 200;
     -fx-transition: all 0.2s ease-in-out;
 }
 
 .add-card-label {
-    -fx-text-fill: #888888;
-    -fx-font-size: 14px;
+    -fx-text-fill: #999999;
+    -fx-font-size: 16px;
     -fx-font-weight: 500;
     -fx-transition: all 0.2s ease-in-out;
 }
@@ -69,10 +84,12 @@
     -fx-text-fill: #007aff;
 }
 
+
 /* ----- GIAO DIỆN CHUNG (Dialog, ContextMenu) ----- */
 .dialog-pane {
     -fx-background-color: #2a2a2a;
     -fx-border-color: #3a3a3a;
+    -fx-background-radius: 12;
 }
 
 .dialog-pane .label {
@@ -86,21 +103,24 @@
 .dialog-pane .header-panel .label {
     -fx-font-size: 1.2em;
     -fx-font-weight: bold;
+    -fx-text-fill: #f0f0f0;
 }
 
 .text-input-dialog .text-field {
     -fx-background-color: #3a3a3a;
     -fx-text-fill: #e0e0e0;
     -fx-border-color: #555;
-    -fx-border-radius: 5;
+    -fx-border-radius: 8; /* Bo góc text field */
     -fx-prompt-text-fill: #777;
+    -fx-padding: 8px 10px;
 }
 
 .button {
     -fx-background-color: #007aff;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-background-radius: 5;
+    -fx-background-radius: 8;
+    -fx-padding: 8px 15px;
 }
 
 .button:hover {
@@ -110,8 +130,9 @@
 .context-menu {
     -fx-background-color: #333333;
     -fx-background-insets: 0, 1, 2;
-    -fx-background-radius: 6;
+    -fx-background-radius: 8; /* Bo góc context menu */
     -fx-padding: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 0);
 }
 
 .menu-item .label {
@@ -120,6 +141,7 @@
 
 .menu-item:focused {
     -fx-background-color: #007aff;
+    -fx-background-radius: 5;
 }
 
 .menu-item:focused .label {

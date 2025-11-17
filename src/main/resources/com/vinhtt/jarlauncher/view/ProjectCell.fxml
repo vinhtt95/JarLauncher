@@ -11,13 +11,12 @@
       alignment="CENTER"
       spacing="15"
       styleClass="project-card"
-      prefWidth="160" prefHeight="160"
-      onMouseClicked="#handleMouseClick">
+      prefWidth="220" prefHeight="220" onMouseClicked="#handleMouseClick">
 
     <padding>
-        <Insets top="15" right="10" bottom="15" left="10"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <ImageView fx:id="iconView" fitWidth="80" fitHeight="80" preserveRatio="true"/>
+    <ImageView fx:id="iconView" fitWidth="128" fitHeight="128" preserveRatio="true"/>
     <Label fx:id="nameLabel" wrapText="true" textAlignment="CENTER"/>
 </VBox>

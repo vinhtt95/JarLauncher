@@ -23,14 +23,16 @@ public class ProjectCellController {
     private static Image DEFAULT_ICON = null;
     static {
         try {
-            InputStream is = ProjectCellController.class.getResourceAsStream("/java-icon.png");
+            // Đảm bảo bạn có file "java-icon-256.png" trong thư mục resources
+            InputStream is = ProjectCellController.class.getResourceAsStream("/java-icon-256.png");
             if (is != null) {
                 DEFAULT_ICON = new Image(is);
             } else {
-                DEFAULT_ICON = new Image("https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg");
+                // Fallback nếu không tìm thấy file cục bộ
+                DEFAULT_ICON = new Image("https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg", 256, 256, true, true);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Lỗi tải icon mặc định: " + e.getMessage());
         }
     }
 
@@ -71,8 +73,9 @@ public class ProjectCellController {
 
         menu.getItems().addAll(renameItem, changeIconItem, new SeparatorMenuItem(), deleteItem);
 
-        nameLabel.getParent().setOnContextMenuRequested(e ->
-                menu.show(nameLabel.getParent(), e.getScreenX(), e.getScreenY())
+        // Context menu sẽ hiển thị khi click chuột phải vào card
+        iconView.getParent().setOnContextMenuRequested(e ->
+                menu.show(iconView.getParent(), e.getScreenX(), e.getScreenY())
         );
     }
 
@@ -91,7 +94,6 @@ public class ProjectCellController {
         TextInputDialog dialog = new TextInputDialog(projectViewModel.nameProperty().get());
         dialog.setTitle("Rename Project");
         dialog.setHeaderText("Nhập tên mới cho dự án:");
-        // Áp dụng CSS cho dialog
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com/vinhtt/jarlauncher/dark-theme.css").toExternalForm());
 
         dialog.showAndWait().ifPresent(newName -> {
@@ -116,7 +118,6 @@ public class ProjectCellController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có chắc muốn xóa dự án này?\n(File dự án gốc sẽ không bị xóa)", ButtonType.YES, ButtonType.NO);
         alert.setTitle("Xác nhận xóa");
         alert.setHeaderText("Xóa " + projectViewModel.nameProperty().get() + "?");
-        // Áp dụng CSS cho dialog
         alert.getDialogPane().getStylesheets().add(getClass().getResource("/com/vinhtt/jarlauncher/dark-theme.css").toExternalForm());
 
         alert.showAndWait().ifPresent(response -> {

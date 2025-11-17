@@ -6,12 +6,11 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       alignment="CENTER"
-      spacing="10"
-      prefWidth="160" prefHeight="160"
-      styleClass="add-card">
+      spacing="15"
+      prefWidth="220" prefHeight="220" styleClass="add-card">
 
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
     <Label text="+" styleClass="add-card-icon"/>
