@@ -23,16 +23,16 @@ public class ProjectCellController {
     private static Image DEFAULT_ICON = null;
     static {
         try {
-            // Đảm bảo bạn có file "java-icon-256.png" trong thư mục resources
-            InputStream is = ProjectCellController.class.getResourceAsStream("/java-icon-256.png");
+            // Đổi tên file ở đây thành file icon mới của bạn
+            InputStream is = ProjectCellController.class.getResourceAsStream("/app-icon.png");
             if (is != null) {
                 DEFAULT_ICON = new Image(is);
             } else {
-                // Fallback nếu không tìm thấy file cục bộ
-                DEFAULT_ICON = new Image("https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg", 256, 256, true, true);
+                // Fallback
+                DEFAULT_ICON = new Image("https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg");
             }
         } catch (Exception e) {
-            System.err.println("Lỗi tải icon mặc định: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
