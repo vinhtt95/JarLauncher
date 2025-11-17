@@ -2,7 +2,7 @@ package com.vinhtt.jarlauncher.view;
 
 import com.vinhtt.jarlauncher.services.impl.JsonProjectRepository;
 import com.vinhtt.jarlauncher.services.impl.MacOSProcessLaunchService;
-import com.vinhtt.jarlauncher.services.impl.MavenJarFinderService;
+import com.vinhtt.jarlauncher.services.impl.RunScriptFinderService; // Import class mới
 import com.vinhtt.jarlauncher.viewmodel.MainViewModel;
 import com.vinhtt.jarlauncher.viewmodel.ProjectViewModel;
 import javafx.collections.ListChangeListener;
@@ -22,19 +22,18 @@ public class MainViewController {
     private MainViewModel viewModel;
 
     public void initialize() {
-        // Dependency Injection (Thủ công cho đơn giản)
+        // Inject RunScriptFinderService thay vì MavenJarFinderService
         viewModel = new MainViewModel(
                 new JsonProjectRepository(),
-                new MavenJarFinderService(),
+                new RunScriptFinderService(),
                 new MacOSProcessLaunchService()
         );
 
-        // Load dữ liệu ban đầu
+        // ... (Phần còn lại giữ nguyên như cũ) ...
         for (ProjectViewModel p : viewModel.getProjects()) {
             addProjectTile(p);
         }
 
-        // Lắng nghe thay đổi của list để update UI
         viewModel.getProjects().addListener((ListChangeListener<ProjectViewModel>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -43,8 +42,6 @@ public class MainViewController {
                     }
                 }
                 if (change.wasRemoved()) {
-                    // Xóa tile tương ứng (Logic đơn giản: clear và render lại, hoặc tìm node để xóa)
-                    // Để đơn giản cho demo: render lại toàn bộ khi xóa
                     projectGrid.getChildren().clear();
                     for (ProjectViewModel p : viewModel.getProjects()) {
                         addProjectTile(p);
@@ -54,6 +51,7 @@ public class MainViewController {
         });
     }
 
+    // ... (Các phương thức addProjectTile, handleAddProject giữ nguyên) ...
     private void addProjectTile(ProjectViewModel projectVM) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectCell.fxml"));
@@ -69,7 +67,7 @@ public class MainViewController {
     @FXML
     private void handleAddProject() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Chọn thư mục dự án Java");
+        directoryChooser.setTitle("Chọn thư mục dự án (chứa run.sh)");
         File selectedDirectory = directoryChooser.showDialog(projectGrid.getScene().getWindow());
 
         if (selectedDirectory != null) {

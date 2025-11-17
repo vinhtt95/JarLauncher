@@ -6,19 +6,18 @@ public class JavaProject {
     private String id;
     private String name;
     private String projectPath;
-    private String jarPath;
+    private String scriptPath;
     private String iconPath;
 
-    // Constructor mặc định cho Jackson
     public JavaProject() {
         this.id = UUID.randomUUID().toString();
     }
 
-    public JavaProject(String name, String projectPath, String jarPath) {
+    public JavaProject(String name, String projectPath, String scriptPath) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.projectPath = projectPath;
-        this.jarPath = jarPath;
+        this.scriptPath = scriptPath;
     }
 
     // Getters and Setters
@@ -31,8 +30,8 @@ public class JavaProject {
     public String getProjectPath() { return projectPath; }
     public void setProjectPath(String projectPath) { this.projectPath = projectPath; }
 
-    public String getJarPath() { return jarPath; }
-    public void setJarPath(String jarPath) { this.jarPath = jarPath; }
+    public String getScriptPath() { return scriptPath; } // Getter mới
+    public void setScriptPath(String scriptPath) { this.scriptPath = scriptPath; } // Setter mới
 
     public String getIconPath() { return iconPath; }
     public void setIconPath(String iconPath) { this.iconPath = iconPath; }

@@ -1,7 +1,7 @@
 package com.vinhtt.jarlauncher.viewmodel;
 
 import com.vinhtt.jarlauncher.model.JavaProject;
-import com.vinhtt.jarlauncher.services.interfaces.IJarFinderService;
+import com.vinhtt.jarlauncher.services.interfaces.IScriptFinderService; // Sử dụng Interface mới
 import com.vinhtt.jarlauncher.services.interfaces.IProcessLaunchService;
 import com.vinhtt.jarlauncher.services.interfaces.IProjectRepository;
 import javafx.collections.FXCollections;
@@ -15,13 +15,12 @@ import java.util.stream.Collectors;
 public class MainViewModel {
     private final ObservableList<ProjectViewModel> projects = FXCollections.observableArrayList();
 
-    // Services
     private final IProjectRepository repository;
-    private final IJarFinderService finderService;
+    private final IScriptFinderService finderService; // Đổi tên biến
     private final IProcessLaunchService launchService;
 
     public MainViewModel(IProjectRepository repository,
-                         IJarFinderService finderService,
+                         IScriptFinderService finderService,
                          IProcessLaunchService launchService) {
         this.repository = repository;
         this.finderService = finderService;
@@ -39,13 +38,19 @@ public class MainViewModel {
     }
 
     public void addNewProject(File projectDir) {
-        Optional<String> jarPath = finderService.findJarInProject(projectDir.getAbsolutePath());
-        if (jarPath.isPresent()) {
-            JavaProject newProject = new JavaProject(projectDir.getName(), projectDir.getAbsolutePath(), jarPath.get());
+        // Gọi service tìm run.sh
+        Optional<String> scriptPath = finderService.findRunScript(projectDir.getAbsolutePath());
+
+        if (scriptPath.isPresent()) {
+            JavaProject newProject = new JavaProject(
+                    projectDir.getName(),
+                    projectDir.getAbsolutePath(),
+                    scriptPath.get()
+            );
             projects.add(new ProjectViewModel(newProject));
             saveData();
         } else {
-            throw new RuntimeException("Không tìm thấy file JAR trong thư mục target!");
+            throw new RuntimeException("Không tìm thấy file 'run.sh' trong thư mục dự án!");
         }
     }
 
