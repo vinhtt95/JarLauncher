@@ -147,39 +147,49 @@
 .menu-item:focused .label {
     -fx-text-fill: white;
 }
+/* ----- SCROLL BAR: Tàng hình mặc định, hiện khi di chuột ----- */
 
-/* ----- ẨN HOÀN TOÀN THANH CUỘN (MODERN / INVISIBLE SCROLL) ----- */
-
-/* 1. Ẩn container chính của thanh cuộn */
+/* 1. Container tổng: Xóa nền, xóa viền */
 .scroll-bar:horizontal, .scroll-bar:vertical {
-    -fx-background-color: rgba(26, 26, 26, 0.7); /* Nền trong suốt */
-    -fx-border-color: transparent;     /* Xóa viền nếu có */
-    -fx-opacity: 0;                    /* Độ mờ = 0 (Tàng hình nhưng vẫn lăn chuột được) */
-    -fx-padding: 0;                    /* Xóa đệm để nội dung tràn ra sát mép */
+    -fx-background-color: rgba(26, 26, 26, 0.7);
+    -fx-border-color: transparent;
+    -fx-padding: 0; /* Đẩy sát lề */
 }
 
-/* 2. Ẩn cái "khung background" (Rãnh trượt) mà bạn muốn xóa */
-.scroll-bar .track {
+/* 2. Rãnh trượt (Track): QUAN TRỌNG - Set trong suốt để mất vệt màu ghi */
+.scroll-bar .track,
+.scroll-bar .track-background {
     -fx-background-color: rgba(26, 26, 26, 0.7);
     -fx-border-color: transparent;
     -fx-background-radius: 0;
 }
 
-/* 3. Ẩn luôn cục nắm kéo (Thumb) - phòng khi opacity ở trên chưa đủ đô */
+/* 3. Cục nắm (Thumb): Mặc định là TRONG SUỐT (ẩn đi) */
 .scroll-bar .thumb {
     -fx-background-color: rgba(26, 26, 26, 0.7);
-    -fx-background-radius: 0;
+    -fx-background-radius: 10; /* Bo tròn cho đẹp */
 }
 
-/* 4. Ẩn mấy cái nút mũi tên ở 2 đầu thanh cuộn */
+/* 4. LOGIC HIỆN: Chỉ khi di chuột vào thanh cuộn (hover) thì cục nắm mới hiện màu */
+.scroll-bar:hover .thumb {
+    -fx-background-color: rgba(150, 150, 150, 0.5); /* Màu xám nhẹ */
+}
+
+/* Khi đang nhấn giữ kéo (Pressed) thì đậm hơn để dễ nhìn */
+.scroll-bar .thumb:pressed {
+    -fx-background-color: rgba(180, 180, 180, 0.8);
+}
+
+/* 5. Ẩn các nút mũi tên ở 2 đầu (Increment/Decrement buttons) */
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
-    -fx-background-color: rgba(26, 26, 26, 0.7);
-    -fx-border-color: transparent;
     -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-shape: " "; /* Xóa hình mũi tên */
 }
 
-/* 5. Ẩn góc giao nhau giữa thanh dọc và ngang (nếu có) */
+/* 6. Xóa góc giao nhau (nếu có cả thanh dọc và ngang) */
 .scroll-pane > .corner {
-    -fx-background-color: rgba(26, 26, 26, 0.7);
+    -fx-background-color: transparent;
 }
