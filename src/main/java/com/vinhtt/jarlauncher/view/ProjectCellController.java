@@ -24,7 +24,7 @@ public class ProjectCellController {
     static {
         try {
             // Đổi tên file ở đây thành file icon mới của bạn
-            InputStream is = ProjectCellController.class.getResourceAsStream("/app-icon.png");
+            InputStream is = ProjectCellController.class.getResourceAsStream("/icon-256.png");
             if (is != null) {
                 DEFAULT_ICON = new Image(is);
             } else {
