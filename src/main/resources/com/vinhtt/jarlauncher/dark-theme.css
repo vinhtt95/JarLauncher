@@ -2,21 +2,21 @@
 .root {
     -fx-background-color: #1a1a1ae0; /* Gần đen, hơi trong suốt */
     -fx-font-family: "SF Pro Text", "Inter", sans-serif;
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
 }
 
 .scroll-pane {
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(26, 26, 26, 0.7);
     -fx-border-color: transparent;
 }
 
 .scroll-pane .viewport {
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(26, 26, 26, 0.7);
 }
 
 /* ----- TILEPANE CHỨA CÁC CARD ----- */
 .tile-pane {
-    -fx-background-color: transparent; /* Đảm bảo TilePane trong suốt */
+    -fx-background-color: rgba(26, 26, 26, 0.7); /* Đảm bảo TilePane trong suốt */
 }
 
 
@@ -146,4 +146,27 @@
 
 .menu-item:focused .label {
     -fx-text-fill: white;
+}
+
+/* ----- ẨN THANH CUỘN (MODERN LOOK) ----- */
+
+/* Làm cho thanh cuộn trong suốt hoàn toàn */
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-opacity: 0; /* Ẩn đi nhưng vẫn tương tác được */
+    -fx-padding: 0; /* Giảm padding để nội dung tràn ra sát mép */
+}
+
+/* Đảm bảo các thành phần con của thanh cuộn cũng ẩn */
+.scroll-bar .track,
+.scroll-bar .thumb,
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Xóa góc giao nhau giữa thanh dọc và ngang (nếu có) */
+.scroll-pane > .corner {
+    -fx-background-color: transparent;
 }
