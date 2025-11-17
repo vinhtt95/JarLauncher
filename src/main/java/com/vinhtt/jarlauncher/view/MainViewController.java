@@ -2,7 +2,7 @@ package com.vinhtt.jarlauncher.view;
 
 import com.vinhtt.jarlauncher.services.impl.JsonProjectRepository;
 import com.vinhtt.jarlauncher.services.impl.MacOSProcessLaunchService;
-import com.vinhtt.jarlauncher.services.impl.RunScriptFinderService; // Import class mới
+import com.vinhtt.jarlauncher.services.impl.RunScriptFinderService;
 import com.vinhtt.jarlauncher.viewmodel.MainViewModel;
 import com.vinhtt.jarlauncher.viewmodel.ProjectViewModel;
 import javafx.collections.ListChangeListener;
@@ -22,36 +22,41 @@ public class MainViewController {
     private MainViewModel viewModel;
 
     public void initialize() {
-        // Inject RunScriptFinderService thay vì MavenJarFinderService
+        // Dependency Injection
         viewModel = new MainViewModel(
                 new JsonProjectRepository(),
                 new RunScriptFinderService(),
                 new MacOSProcessLaunchService()
         );
 
-        // ... (Phần còn lại giữ nguyên như cũ) ...
+        // Lắng nghe thay đổi của list (Add, Remove) và gọi refreshGrid
+        viewModel.getProjects().addListener((ListChangeListener<ProjectViewModel>) change -> {
+            refreshGrid();
+        });
+
+        // Vẽ grid lần đầu tiên
+        refreshGrid();
+    }
+
+    /**
+     * Vẽ lại toàn bộ grid. Xóa tất cả và thêm lại các project card,
+     * sau đó thêm "Add Card" vào cuối.
+     */
+    private void refreshGrid() {
+        projectGrid.getChildren().clear();
+
+        // Thêm tất cả project card
         for (ProjectViewModel p : viewModel.getProjects()) {
             addProjectTile(p);
         }
 
-        viewModel.getProjects().addListener((ListChangeListener<ProjectViewModel>) change -> {
-            while (change.next()) {
-                if (change.wasAdded()) {
-                    for (ProjectViewModel p : change.getAddedSubList()) {
-                        addProjectTile(p);
-                    }
-                }
-                if (change.wasRemoved()) {
-                    projectGrid.getChildren().clear();
-                    for (ProjectViewModel p : viewModel.getProjects()) {
-                        addProjectTile(p);
-                    }
-                }
-            }
-        });
+        // Thêm "Add Project Card" vào cuối
+        addTheAddCard();
     }
 
-    // ... (Các phương thức addProjectTile, handleAddProject giữ nguyên) ...
+    /**
+     * Tải FXML của ProjectCell, bind data và thêm vào grid.
+     */
     private void addProjectTile(ProjectViewModel projectVM) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectCell.fxml"));
@@ -64,7 +69,26 @@ public class MainViewController {
         }
     }
 
-    @FXML
+    /**
+     * Tải FXML của AddProjectCard, gán sự kiện click, và thêm vào grid.
+     */
+    private void addTheAddCard() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddProjectCard.fxml"));
+            Parent root = loader.load();
+
+            // Gán sự kiện click cho "Add Card"
+            root.setOnMouseClicked(event -> handleAddProject());
+
+            projectGrid.getChildren().add(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Hàm này bây giờ được gọi bởi "Add Card".
+     */
     private void handleAddProject() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Chọn thư mục dự án (chứa run.sh)");
@@ -73,10 +97,21 @@ public class MainViewController {
         if (selectedDirectory != null) {
             try {
                 viewModel.addNewProject(selectedDirectory);
+                // ListChangeListener sẽ tự động kích hoạt refreshGrid()
             } catch (Exception e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
-                alert.show();
+                showErrorDialog(e.getMessage());
             }
         }
+    }
+
+    /**
+     * Hiển thị lỗi với style dark mode
+     */
+    private void showErrorDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.getDialogPane().getStylesheets().add(
+                getClass().getResource("/com/vinhtt/jarlauncher/dark-theme.css").toExternalForm()
+        );
+        alert.show();
     }
 }

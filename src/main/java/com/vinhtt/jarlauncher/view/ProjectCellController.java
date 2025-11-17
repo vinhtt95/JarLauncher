@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class ProjectCellController {
     @FXML private Label nameLabel;
@@ -18,8 +19,20 @@ public class ProjectCellController {
     private ProjectViewModel projectViewModel;
     private MainViewModel mainViewModel;
 
-    // Ảnh mặc định (cần thêm file này vào resources nếu muốn đẹp, hoặc dùng text placeholder)
-    private static final Image DEFAULT_ICON = new Image("https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg");
+    // Load icon default
+    private static Image DEFAULT_ICON = null;
+    static {
+        try {
+            InputStream is = ProjectCellController.class.getResourceAsStream("/java-icon.png");
+            if (is != null) {
+                DEFAULT_ICON = new Image(is);
+            } else {
+                DEFAULT_ICON = new Image("https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setData(ProjectViewModel projectVM, MainViewModel mainVM) {
         this.projectViewModel = projectVM;
@@ -29,18 +42,19 @@ public class ProjectCellController {
         nameLabel.textProperty().bindBidirectional(projectVM.nameProperty());
 
         // Icon Binding
-        if (projectVM.iconProperty().get() != null) {
-            iconView.setImage(projectVM.iconProperty().get());
+        updateIcon(projectVM.iconProperty().get());
+
+        projectVM.iconProperty().addListener((obs, oldVal, newVal) -> updateIcon(newVal));
+
+        setupContextMenu();
+    }
+
+    private void updateIcon(Image newImage) {
+        if (newImage != null) {
+            iconView.setImage(newImage);
         } else {
             iconView.setImage(DEFAULT_ICON);
         }
-
-        // Listen change để update icon nếu user đổi
-        projectVM.iconProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) iconView.setImage(newVal);
-        });
-
-        setupContextMenu();
     }
 
     private void setupContextMenu() {
@@ -68,8 +82,7 @@ public class ProjectCellController {
             try {
                 mainViewModel.launchProject(projectViewModel);
             } catch (Exception e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khởi chạy: " + e.getMessage());
-                alert.show();
+                showStyledError("Lỗi khởi chạy: " + e.getMessage());
             }
         }
     }
@@ -77,10 +90,15 @@ public class ProjectCellController {
     private void handleRename() {
         TextInputDialog dialog = new TextInputDialog(projectViewModel.nameProperty().get());
         dialog.setTitle("Rename Project");
-        dialog.setHeaderText("Nhập tên mới:");
+        dialog.setHeaderText("Nhập tên mới cho dự án:");
+        // Áp dụng CSS cho dialog
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com/vinhtt/jarlauncher/dark-theme.css").toExternalForm());
+
         dialog.showAndWait().ifPresent(newName -> {
-            projectViewModel.nameProperty().set(newName);
-            mainViewModel.saveData();
+            if (newName != null && !newName.trim().isEmpty()) {
+                projectViewModel.nameProperty().set(newName);
+                mainViewModel.saveData();
+            }
         });
     }
 
@@ -95,11 +113,22 @@ public class ProjectCellController {
     }
 
     private void handleDelete() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có chắc muốn xóa dự án này?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có chắc muốn xóa dự án này?\n(File dự án gốc sẽ không bị xóa)", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Xác nhận xóa");
+        alert.setHeaderText("Xóa " + projectViewModel.nameProperty().get() + "?");
+        // Áp dụng CSS cho dialog
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("/com/vinhtt/jarlauncher/dark-theme.css").toExternalForm());
+
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 mainViewModel.deleteProject(projectViewModel);
             }
         });
+    }
+
+    private void showStyledError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("/com/vinhtt/jarlauncher/dark-theme.css").toExternalForm());
+        alert.show();
     }
 }

@@ -9,15 +9,15 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.vinhtt.jarlauncher.view.ProjectCellController"
       alignment="CENTER"
-      spacing="10"
-      style="-fx-background-color: #f4f4f4; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);"
-      prefWidth="150" prefHeight="180"
+      spacing="15"
+      styleClass="project-card"
+      prefWidth="160" prefHeight="160"
       onMouseClicked="#handleMouseClick">
 
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets top="15" right="10" bottom="15" left="10"/>
     </padding>
 
     <ImageView fx:id="iconView" fitWidth="80" fitHeight="80" preserveRatio="true"/>
-    <Label fx:id="nameLabel" style="-fx-font-weight: bold; -fx-font-size: 14px;" wrapText="true" textAlignment="CENTER"/>
+    <Label fx:id="nameLabel" wrapText="true" textAlignment="CENTER"/>
 </VBox>

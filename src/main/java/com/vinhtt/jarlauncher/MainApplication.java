@@ -11,7 +11,11 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("view/MainView.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 820, 600);
+
+        // Load file CSS Dark Mode
+        scene.getStylesheets().add(getClass().getResource("dark-theme.css").toExternalForm());
+
         stage.setTitle("Jar Launcher Manager");
         stage.setScene(scene);
         stage.show();
