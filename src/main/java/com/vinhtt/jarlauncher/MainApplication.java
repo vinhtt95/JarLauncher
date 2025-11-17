@@ -21,22 +21,27 @@ public class MainApplication extends Application {
         scene.getStylesheets().add(getClass().getResource("dark-theme.css").toExternalForm());
 
         try {
-            // Lưu ý: Đảm bảo đường dẫn trùng khớp với nơi bạn để file trong resources
-            InputStream iconStream = getClass().getResourceAsStream("app_icon.png");
+            // SỬA Ở ĐÂY:
+            // 1. Thêm dấu '/' ở đầu để tìm từ thư mục gốc resources
+            // 2. Sửa 'app_icon.png' thành 'app-icon.png' cho đúng tên file
+            InputStream iconStream = getClass().getResourceAsStream("/app-icon.png");
+
             if (iconStream != null) {
                 stage.getIcons().add(new Image(iconStream));
 
-                // Dành riêng cho macOS (để icon hiển thị trên Dock khi chạy bằng IDE/Jar)
-                // Yêu cầu JDK 9 trở lên (Dự án bạn đang dùng JDK 21 nên OK)
+                // Code cho macOS Dock icon
                 if (java.awt.Taskbar.isTaskbarSupported()) {
                     java.awt.Taskbar taskbar = java.awt.Taskbar.getTaskbar();
                     if (taskbar.isSupported(java.awt.Taskbar.Feature.ICON_IMAGE)) {
-                        java.awt.Image awtImage = javax.imageio.ImageIO.read(Objects.requireNonNull(MainApplication.class.getResourceAsStream("app-icon.png")));
+                        // Đọc lại stream vì stream cũ đã bị 'new Image()' đọc hết
+                        java.awt.Image awtImage = javax.imageio.ImageIO.read(
+                                Objects.requireNonNull(getClass().getResourceAsStream("/app-icon.png"))
+                        );
                         taskbar.setIconImage(awtImage);
                     }
                 }
             } else {
-                System.err.println("Không tìm thấy file icon!");
+                System.err.println("Không tìm thấy file icon tại đường dẫn /app-icon.png");
             }
         } catch (Exception e) {
             e.printStackTrace();
