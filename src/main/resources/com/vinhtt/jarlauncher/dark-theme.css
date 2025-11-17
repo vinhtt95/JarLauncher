@@ -148,25 +148,38 @@
     -fx-text-fill: white;
 }
 
-/* ----- ẨN THANH CUỘN (MODERN LOOK) ----- */
+/* ----- ẨN HOÀN TOÀN THANH CUỘN (MODERN / INVISIBLE SCROLL) ----- */
 
-/* Làm cho thanh cuộn trong suốt hoàn toàn */
+/* 1. Ẩn container chính của thanh cuộn */
 .scroll-bar:horizontal, .scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-opacity: 0; /* Ẩn đi nhưng vẫn tương tác được */
-    -fx-padding: 0; /* Giảm padding để nội dung tràn ra sát mép */
+    -fx-background-color: rgba(26, 26, 26, 0.7); /* Nền trong suốt */
+    -fx-border-color: transparent;     /* Xóa viền nếu có */
+    -fx-opacity: 0;                    /* Độ mờ = 0 (Tàng hình nhưng vẫn lăn chuột được) */
+    -fx-padding: 0;                    /* Xóa đệm để nội dung tràn ra sát mép */
 }
 
-/* Đảm bảo các thành phần con của thanh cuộn cũng ẩn */
-.scroll-bar .track,
-.scroll-bar .thumb,
+/* 2. Ẩn cái "khung background" (Rãnh trượt) mà bạn muốn xóa */
+.scroll-bar .track {
+    -fx-background-color: rgba(26, 26, 26, 0.7);
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+}
+
+/* 3. Ẩn luôn cục nắm kéo (Thumb) - phòng khi opacity ở trên chưa đủ đô */
+.scroll-bar .thumb {
+    -fx-background-color: rgba(26, 26, 26, 0.7);
+    -fx-background-radius: 0;
+}
+
+/* 4. Ẩn mấy cái nút mũi tên ở 2 đầu thanh cuộn */
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(26, 26, 26, 0.7);
     -fx-border-color: transparent;
+    -fx-padding: 0;
 }
 
-/* Xóa góc giao nhau giữa thanh dọc và ngang (nếu có) */
+/* 5. Ẩn góc giao nhau giữa thanh dọc và ngang (nếu có) */
 .scroll-pane > .corner {
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(26, 26, 26, 0.7);
 }
